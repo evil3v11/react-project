@@ -12,9 +12,14 @@ import { useState } from "react";
 function App() {
   const [data, setData] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoginForm, setIsLoginForm] = useState(true);
 
   const handleLogin = () => {
-    setData(Date.now());
+    setIsLoginForm(true);
+  };
+
+  const handleRegistration = () => {
+    setIsLoginForm(false);
   };
 
   const handleChangeLogin = (e) => {
@@ -27,27 +32,57 @@ function App() {
 
   return (
     <Stack sx={{ alignItems: "center" }}>
-      <Stack sx={{ width: 300, gap: 3 }}>
-        <Typography variant="h3">Вход в сервис {data}</Typography>
-        <TextField
-          id="login"
-          label="Login"
-          variant="standard"
-          onChange={handleChangeLogin}
-          value={data}
-        />
-        <TextField
-          id="password"
-          label="Password"
-          type="password"
-          variant="standard"
-          onChange={handleChangePass}
-          value={password}
-        />
-        <Button onClick={handleLogin} variant="contained">
-          Войти
-        </Button>
-      </Stack>
+      {isLoginForm ? (
+        <Stack sx={{ width: 300, gap: 3 }}>
+          <Typography variant="h3">Вход в сервис {data}</Typography>
+          <Typography variant="subtitle1">Нет учетной записи?</Typography>
+          <Button variant="text" onClick={handleRegistration}>
+            Зарегестрироваться
+          </Button>
+          <TextField
+            id="login"
+            label="Login"
+            variant="standard"
+            onChange={handleChangeLogin}
+            value={data}
+          />
+          <TextField
+            id="password"
+            label="Password"
+            type="password"
+            variant="standard"
+            onChange={handleChangePass}
+            value={password}
+          />
+          <Button onClick={handleLogin} variant="contained">
+            Войти
+          </Button>
+        </Stack>
+      ) : (
+        <Stack sx={{ width: 300, gap: 3 }}>
+          <Typography variant="h3">Регистрация</Typography>
+          <Typography variant="subtitle1">Есть учетная запись?</Typography>
+          <Button variant="text" onClick={handleLogin}>
+            Войти
+          </Button>
+          <TextField
+            id="login"
+            label="Login"
+            variant="standard"
+            onChange={handleChangeLogin}
+            value={data}
+          />
+          <TextField
+            id="password"
+            label="Password"
+            type="password"
+            variant="standard"
+            onChange={handleChangePass}
+            value={password}
+          />
+          <Button variant="contained">Регистрация</Button>
+        </Stack>
+      )}
     </Stack>
   );
 }
