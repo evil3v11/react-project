@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
@@ -6,9 +7,11 @@ import Stack from "@mui/material/Stack";
 import SignUpForm from "./components/SignUpForm";
 
 function App() {
+  const [user, setUser] = useState();
+
   return (
     <Stack sx={{ alignItems: "center" }}>
-      <SignUpForm />
+      {user ? <div>{ user.name }</div> : <SignUpForm setUser={setUser} />}
     </Stack>
   );
 }
