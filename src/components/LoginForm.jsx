@@ -6,12 +6,14 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import { useSnackbar } from "notistack";
 
 import { useState } from "react";
 
 function LoginForm(props) {
   const [data, setData] = useState("");
   const [password, setPassword] = useState("");
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleChangeLogin = (e) => setData(e.target.value);
   const handleChangePass = (e) => setPassword(e.target.value);
@@ -19,8 +21,9 @@ function LoginForm(props) {
   const handleLoginClick = () => {
     if (data === "admin" && password === "123") {
       props.setUser({ name: data });
+      enqueueSnackbar("Welcome, " + data, { variant: "success" });
     } else {
-      console.log("Unknown user");
+      enqueueSnackbar("Invalid data or server error", { variant: "error" });
     }
   };
 
