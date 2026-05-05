@@ -2,6 +2,7 @@ import { React, useState } from "react";
 import Typography from "@mui/material/Typography";
 import TodoItem from "./TodoItem";
 import Button from "@mui/material/Button";
+import AddTodo from "./AddTodo";
 
 const todo = {
   id: "13",
@@ -13,21 +14,21 @@ const todo = {
 const HomePage = (props) => {
   const [todos, setTodos] = useState([todo]);
 
-  const handleAddTodo = () => {
+  const handleAddTodo = (title, description) => {
     const newTodo = {
       id: Date.now().toString(),
-      title: "Get Haircut",
-      description: "Need to get to the barbershop",
+      title,
+      description,
       isDone: true,
     };
-    
-    setTodos([...todos, newTodo])
+
+    setTodos([...todos, newTodo]);
   };
 
   return (
     <div>
       <Typography>{props.username}</Typography>
-      <Button onClick={handleAddTodo}>Add Todo</Button>
+      <AddTodo addTodo={handleAddTodo} />
       {todos.map((item) => (
         <TodoItem todo={item} key={item.id} />
       ))}
