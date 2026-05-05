@@ -1,39 +1,36 @@
-import React from "react";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
+import { React, useState } from "react";
 import Typography from "@mui/material/Typography";
-import Checkbox from "@mui/material/Checkbox";
+import TodoItem from "./TodoItem";
+import Button from "@mui/material/Button";
+
+const todo = {
+  id: "13",
+  title: "Get Haircut",
+  description: "Need to get to the barbershop",
+  isDone: true,
+};
 
 const HomePage = (props) => {
-  const toDo = {
-    id: "13",
-    title: "Get Haircut",
-    description: "Need to get to the barbershop",
-    isDone: true,
+  const [todos, setTodos] = useState([todo]);
+
+  const handleAddTodo = () => {
+    const newTodo = {
+      id: Date.now().toString(),
+      title: "Get Haircut",
+      description: "Need to get to the barbershop",
+      isDone: true,
+    };
+    
+    setTodos([...todos, newTodo])
   };
 
   return (
     <div>
       <Typography>{props.username}</Typography>
-      <Card sx={{ minWidth: 275 }}>
-        <CardContent>
-          <Typography gutterBottom>{toDo.title}</Typography>
-          <Typography variant="body2">{toDo.description}</Typography>
-        </CardContent>
-        <CardActions>
-          <Checkbox checked={toDo.isDone} />
-          <Button size="small">Change</Button>
-          <Button
-            size="small"
-            sx={{ backgroundColor: "crimson", color: "white" }}
-          >
-            Delete
-          </Button>
-        </CardActions>
-      </Card>
+      <Button onClick={handleAddTodo}>Add Todo</Button>
+      {todos.map((item) => (
+        <TodoItem todo={item} key={item.id} />
+      ))}
     </div>
   );
 };
