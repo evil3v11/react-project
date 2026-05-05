@@ -10,14 +10,14 @@ import { useState } from "react";
 import LoginForm from "./LoginForm";
 import RegistrationForm from "./RegistrationForm";
 
-function SignUpForm() {
+function SignUpForm(props) {
   const [isLoginForm, setIsLoginForm] = useState(true);
 
   const handleLogin = () => setIsLoginForm(true);
   const handleRegistration = () => setIsLoginForm(false);
 
   return isLoginForm ? (
-    <LoginForm handleRegistration={handleRegistration} />
+    <LoginForm setUser={props.setUser} handleRegistration={handleRegistration} />
   ) : (
     <RegistrationForm handleLogin={handleLogin} />
   );
