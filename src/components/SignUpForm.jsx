@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { useState } from "react";
+import { react, useState } from "react";
 import LoginForm from "./LoginForm";
 import RegistrationForm from "./RegistrationForm";
 
