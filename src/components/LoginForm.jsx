@@ -6,24 +6,37 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import axios from "axios";
 import { useSnackbar } from "notistack";
-
 import { React, useState } from "react";
 
 function LoginForm(props) {
   const [data, setData] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   const handleChangeLogin = (e) => setData(e.target.value);
   const handleChangePass = (e) => setPassword(e.target.value);
 
-  const handleLoginClick = () => {
-    if (data === "admin" && password === "123") {
-      props.setUser({ name: data });
-      enqueueSnackbar("Welcome, " + data, { variant: "success" });
-    } else {
+  const handleLoginClick = async () => {
+    try {
+      setIsLoading(true);
+      const res = await axios.post("https://todos-be.vercel.app/auth/login", {
+        username: data,
+        password: password,
+      });
+
+      if (res.status === 200 && res.data.username) {
+        props.setUser({ name: res.data.username });
+        enqueueSnackbar("Welcome, " + res.data.username, {
+          variant: "success",
+        });
+      }
+    } catch (e) {
       enqueueSnackbar("Invalid data or server error", { variant: "error" });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -53,7 +66,11 @@ function LoginForm(props) {
         onChange={handleChangePass}
         value={password}
       />
-      <Button onClick={handleLoginClick} variant="contained">
+      <Button
+        disabled={isLoading || !data || !password}
+        onClick={handleLoginClick}
+        variant="contained"
+      >
         Войти
       </Button>
     </Stack>
