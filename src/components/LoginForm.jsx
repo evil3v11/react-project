@@ -12,13 +12,13 @@ import { React, useState } from "react";
 import { useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 
-function LoginForm(props) {
+function LoginForm() {
   const [data, setData] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const handleChangeLogin = (e) => setData(e.target.value);
   const handleChangePass = (e) => setPassword(e.target.value);
@@ -32,9 +32,9 @@ function LoginForm(props) {
       });
 
       if (res.status === 200 && res.data.username) {
-        const setUserAction = props.setUser(res.data);
-        dispatch(setUserAction)
-        
+        const setUserAction = setUser(res.data);
+        dispatch(setUserAction);
+
         enqueueSnackbar("Welcome, " + res.data.username, {
           variant: "success",
         });
@@ -53,7 +53,9 @@ function LoginForm(props) {
       </Typography>
       <Typography variant="subtitle1" gutterBottom>
         Нет учетной записи?
-        <NavLink to="/register">Зарегистрироваться</NavLink>
+        <NavLink style={{ display: "block", marginTop: '10px', textDecoration: 'none', color: 'rgb(25, 118, 210)' }} to="/register">
+          Зарегистрироваться
+        </NavLink>
       </Typography>
 
       <TextField

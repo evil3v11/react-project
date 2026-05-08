@@ -2,9 +2,15 @@ import { AppBar, Box, Button, Stack, Toolbar, Typography } from "@mui/material";
 import { NavLink, Outlet } from "react-router-dom";
 
 const navItems = [
-  <NavLink to="login">Login</NavLink>,
-  <NavLink to="register">Register</NavLink>,
-  <NavLink to="about">About</NavLink>,
+  <NavLink style={{ color: "#fff", textDecoration: "none" }} to="login">
+    Login
+  </NavLink>,
+  <NavLink style={{ color: "#fff", textDecoration: "none" }} to="register">
+    Register
+  </NavLink>,
+  <NavLink style={{ color: "#fff", textDecoration: "none" }} to="about">
+    About
+  </NavLink>,
 ];
 
 function Layout() {
@@ -12,17 +18,13 @@ function Layout() {
     <>
       <AppBar component="nav">
         <Toolbar>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
-          >
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Todo List
           </Typography>
 
-          <Box sx={{ display: { xs: "none", sm: "block" } }}>
+          <Box>
             {navItems.map((item, i) => (
-              <Button key={i} sx={{ color: "#fff" }}>
+              <Button size="small" key={i}>
                 {item}
               </Button>
             ))}

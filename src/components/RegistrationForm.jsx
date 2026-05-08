@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { setUser } from "../lib/userSlice";
 
-function RegistrationForm(props) {
+function RegistrationForm() {
   const [data, setData] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -66,7 +66,7 @@ function RegistrationForm(props) {
       </Typography>
       <Typography variant="subtitle1" gutterBottom>
         Есть учетная запись?
-        <NavLink to="/login">Войти</NavLink>
+        <NavLink style={{ display: "block", marginTop: '10px', textDecoration: 'none', color: 'rgb(25, 118, 210)' }} to="/login">Войти</NavLink>
       </Typography>
 
       <TextField
