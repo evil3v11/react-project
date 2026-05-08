@@ -22,7 +22,7 @@ function AddTodo(props) {
   }
 
   return (
-    <Accordion defaultExpanded>
+    <Accordion defaultExpanded disabled={props.isLoading}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography component="span">Add Todo</Typography>
       </AccordionSummary>
