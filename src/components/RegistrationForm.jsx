@@ -9,13 +9,17 @@ import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import { React, useState } from "react";
+import { useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
+import { setUser } from "../lib/userSlice";
 
 function RegistrationForm(props) {
   const [data, setData] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+
+  const dispatch = useDispatch();
 
   const handleChangeLogin = (e) => setData(e.target.value);
   const handleChangePass = (e) => setPassword(e.target.value);
@@ -38,7 +42,8 @@ function RegistrationForm(props) {
         });
 
         if (res.status === 200 && res.data.username) {
-          props.setUser(res.data);
+          const setUserAction = setUser(res.data);
+          dispatch(setUserAction);
           enqueueSnackbar("Welcome, " + res.data.username, {
             variant: "success",
           });
