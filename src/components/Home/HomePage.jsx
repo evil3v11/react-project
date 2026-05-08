@@ -25,12 +25,38 @@ const HomePage = (props) => {
     setTodos([...todos, newTodo]);
   };
 
+  const handleDeleteTodo = (id) => {
+    setTodos((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  const handleDoneTodo = (id) => {
+    setTodos((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, isDone: !item.isDone } : item,
+      ),
+    );
+  };
+
+  const handleUpdateTodo = (id, title, description) => {
+    setTodos((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, title, description } : item,
+      ),
+    );
+  };
+
   return (
     <div>
       <Typography>{props.username}</Typography>
       <AddTodo addTodo={handleAddTodo} />
       {todos.map((item) => (
-        <TodoItem todo={item} key={item.id} />
+        <TodoItem
+          todo={item}
+          key={item.id}
+          handleDeleteTodo={handleDeleteTodo}
+          handleDoneTodo={handleDoneTodo}
+          handleUpdateTodo={handleUpdateTodo}
+        />
       ))}
     </div>
   );
