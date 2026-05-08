@@ -8,7 +8,13 @@ import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 
-function TodoItem({ todo, handleDeleteTodo, handleDoneTodo, handleUpdateTodo }) {
+function TodoItem({
+  todo,
+  handleDeleteTodo,
+  handleDoneTodo,
+  handleUpdateTodo,
+  isLoading,
+}) {
   const [isEdit, setIsEdit] = useState(false);
   const [title, setTitle] = useState(todo.title || "");
   const [description, setDescription] = useState(todo.description || "");
@@ -17,14 +23,14 @@ function TodoItem({ todo, handleDeleteTodo, handleDoneTodo, handleUpdateTodo }) 
   const handleChangeDescription = (e) => setDescription(e.target.value);
   const toggleIsEdit = () => {
     setIsEdit(!isEdit);
-    if (isEdit) handleUpdateTodo(todo.id, title, description)
-  } 
+    if (isEdit) handleUpdateTodo(todo._id, title, description);
+  };
 
   return (
     <Card
       sx={{
         minWidth: 275,
-        backgroundColor: todo.isDone ? "beige" : undefined,
+        backgroundColor: todo.completed ? "beige" : undefined,
       }}
     >
       <CardContent>
@@ -35,6 +41,7 @@ function TodoItem({ todo, handleDeleteTodo, handleDoneTodo, handleUpdateTodo }) 
               size="small"
               value={title}
               onChange={handleChangeTitle}
+              disabled={isLoading}
             />
           ) : (
             <Typography gutterBottom>{todo.title}</Typography>
@@ -45,6 +52,7 @@ function TodoItem({ todo, handleDeleteTodo, handleDoneTodo, handleUpdateTodo }) 
               size="small"
               value={description}
               onChange={handleChangeDescription}
+              disabled={isLoading}
             />
           ) : (
             <Typography variant="body2">{todo.description}</Typography>
@@ -53,16 +61,17 @@ function TodoItem({ todo, handleDeleteTodo, handleDoneTodo, handleUpdateTodo }) 
       </CardContent>
       <CardActions>
         <Checkbox
-          checked={todo.isDone}
-          onChange={() => handleDoneTodo(todo.id)}
+          checked={todo.completed}
+          onChange={() => handleDoneTodo(todo._id)}
         />
-        <Button size="small" onClick={toggleIsEdit}>
+        <Button size="small" onClick={toggleIsEdit} disabled={isLoading}>
           {isEdit ? "Save" : "Change"}
         </Button>
         <Button
           size="small"
           sx={{ backgroundColor: "crimson", color: "white" }}
-          onClick={() => handleDeleteTodo(todo.id)}
+          onClick={() => handleDeleteTodo(todo._id)}
+          disabled={isLoading}
         >
           Delete
         </Button>

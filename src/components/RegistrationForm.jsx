@@ -37,7 +37,7 @@ function RegistrationForm(props) {
         });
 
         if (res.status === 200 && res.data.username) {
-          props.setUser({ name: res.data.username });
+          props.setUser(res.data);
           enqueueSnackbar("Welcome, " + res.data.username, {
             variant: "success",
           });
