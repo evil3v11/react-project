@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import { React, useState } from "react";
+import { NavLink } from "react-router-dom";
 
 function LoginForm(props) {
   const [data, setData] = useState("");
@@ -47,10 +48,9 @@ function LoginForm(props) {
       </Typography>
       <Typography variant="subtitle1" gutterBottom>
         Нет учетной записи?
+        <NavLink to="/register">Зарегистрироваться</NavLink>
       </Typography>
-      <Button variant="text" onClick={props.handleRegistration}>
-        Зарегестрироваться
-      </Button>
+
       <TextField
         id="login"
         label="Login"
