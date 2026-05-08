@@ -60,13 +60,23 @@ function RegistrationForm() {
   };
 
   return (
-    <Stack sx={{ width: 300, gap: 3 }}>
+    <Stack sx={{ width: 300, gap: 3, textAlign: "center" }}>
       <Typography variant="h3" gutterBottom>
         Регистрация
       </Typography>
       <Typography variant="subtitle1" gutterBottom>
         Есть учетная запись?
-        <NavLink style={{ display: "block", marginTop: '10px', textDecoration: 'none', color: 'rgb(25, 118, 210)' }} to="/login">Войти</NavLink>
+        <NavLink
+          style={{
+            display: "block",
+            marginTop: "10px",
+            textDecoration: "none",
+            color: "rgb(25, 118, 210)",
+          }}
+          to="/login"
+        >
+          Войти
+        </NavLink>
       </Typography>
 
       <TextField

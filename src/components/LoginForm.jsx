@@ -47,7 +47,7 @@ function LoginForm() {
   };
 
   return (
-    <Stack sx={{ width: 300, gap: 3 }}>
+    <Stack sx={{ width: 300, gap: 3, textAlign: 'center' }}>
       <Typography variant="h3" gutterBottom>
         Вход в сервис
       </Typography>
