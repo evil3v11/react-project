@@ -25,14 +25,23 @@ const HomePage = (props) => {
     setTodos([...todos, newTodo]);
   };
 
-  const handleDeleteTodo = (id) =>
+  const handleDeleteTodo = (id) => {
     setTodos((prev) => prev.filter((item) => item.id !== id));
+  };
 
   const handleDoneTodo = (id) => {
     setTodos((prev) =>
-      prev.map((item) => {
-        return item.id === id ? { ...item, isDone: !item.isDone } : item;
-      }),
+      prev.map((item) =>
+        item.id === id ? { ...item, isDone: !item.isDone } : item,
+      ),
+    );
+  };
+
+  const handleUpdateTodo = (id, title, description) => {
+    setTodos((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, title, description } : item,
+      ),
     );
   };
 
@@ -46,6 +55,7 @@ const HomePage = (props) => {
           key={item.id}
           handleDeleteTodo={handleDeleteTodo}
           handleDoneTodo={handleDoneTodo}
+          handleUpdateTodo={handleUpdateTodo}
         />
       ))}
     </div>
