@@ -5,6 +5,8 @@ import RegistrationForm from "../components/RegistrationForm";
 import Layout from "../components/UI/Layout";
 import ErrorElement from "../components/UI/ErrorElement";
 import NotFound from "../components/UI/NotFound";
+import Redirector from "../components/utils/Redirector";
+import Profile from "../components/profile/Profile";
 
 export const router = createBrowserRouter([
   {
@@ -13,9 +15,19 @@ export const router = createBrowserRouter([
     errorElement: <ErrorElement />,
     children: [
       {
+        element: <Redirector />,
+        children: [
+          {
         index: true,
         element: <HomePage />,
+          },
+          {
+            path: '/profile',
+            element: <Profile />
+          }
+        ]
       },
+      
       {
         path: "/login",
         element: <LoginForm />,

@@ -10,7 +10,7 @@ function ErrorElement() {
         An error has occured
       </Typography>
       <Typography>We're working to fix it</Typography>
-      <NavLink to="/login">Main Page</NavLink>
+      <NavLink to="/">Main Page</NavLink>
     </Stack>
   );
 }
