@@ -5,17 +5,21 @@ import AddTodo from "./AddTodo";
 import { enqueueSnackbar } from "notistack";
 import axios from "axios";
 import { CircularProgress } from "@mui/material";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../lib/userSlice";
+import { Navigate } from "react-router-dom";
 
-const HomePage = (props) => {
+function HomePage() {
   const [todos, setTodos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const user = useSelector(selectUser);
 
   const getTodos = async () => {
     try {
       setIsLoading(true);
       const res = await axios.get("https://todos-be.vercel.app/todos", {
         headers: {
-          Authorization: `Bearer ${props.username.access_token}`,
+          Authorization: `Bearer ${user?.access_token}`,
         },
       });
       setTodos(res.data);
@@ -29,8 +33,10 @@ const HomePage = (props) => {
   };
 
   useEffect(() => {
-    if (props.username.access_token) getTodos();
-  }, [props.username.access_token]);
+    if (user?.access_token) getTodos();
+  }, [user?.access_token]);
+
+  if (!user) return <Navigate to='/login' />
 
   if (isLoading) return <CircularProgress />;
 
@@ -45,7 +51,7 @@ const HomePage = (props) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${props.username.access_token}`,
+            Authorization: `Bearer ${user?.access_token}`,
           },
         },
       );
@@ -66,7 +72,7 @@ const HomePage = (props) => {
         `https://todos-be.vercel.app/todos/${id}`,
         {
           headers: {
-            Authorization: `Bearer ${props.username.access_token}`,
+            Authorization: `Bearer ${user?.access_token}`,
           },
         },
       );
@@ -90,7 +96,7 @@ const HomePage = (props) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${props.username.access_token}`,
+            Authorization: `Bearer ${user?.access_token}`,
           },
         },
       );
@@ -116,7 +122,7 @@ const HomePage = (props) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${props.username.access_token}`,
+            Authorization: `Bearer ${user?.access_token}`,
           },
         },
       );
@@ -132,7 +138,7 @@ const HomePage = (props) => {
 
   return (
     <div>
-      <Typography>{props.username.username}</Typography>
+      <Typography>{user?.username}</Typography>
       <AddTodo addTodo={handleAddTodo} />
       {todos.map((item) => (
         <TodoItem
@@ -146,6 +152,6 @@ const HomePage = (props) => {
       ))}
     </div>
   );
-};
+}
 
 export default HomePage;

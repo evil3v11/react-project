@@ -9,7 +9,7 @@ function NotFound() {
       <Typography variant="h3" color="initial">
         Page not found
       </Typography>
-      <NavLink to="/login">Main Page</NavLink>
+      <NavLink to="/">Main Page</NavLink>
     </Stack>
   )
 }

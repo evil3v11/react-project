@@ -10,15 +10,16 @@ import axios from "axios";
 import { useSnackbar } from "notistack";
 import { React, useState } from "react";
 import { useDispatch } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { setUser } from "../lib/userSlice";
 
 function LoginForm() {
   const [data, setData] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   const handleChangeLogin = (e) => setData(e.target.value);
   const handleChangePass = (e) => setPassword(e.target.value);
@@ -38,9 +39,11 @@ function LoginForm() {
         enqueueSnackbar("Welcome, " + res.data.username, {
           variant: "success",
         });
+        
+        navigate('/')
       }
     } catch (e) {
-      enqueueSnackbar("Invalid data or server error", { variant: "error" });
+      enqueueSnackbar("Invalid data or server error?", { variant: "error" });
     } finally {
       setIsLoading(false);
     }
