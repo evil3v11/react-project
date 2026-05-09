@@ -6,38 +6,61 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import axios from "axios";
 import { useSnackbar } from "notistack";
-
 import { React, useState } from "react";
+import { useDispatch } from "react-redux";
+import { NavLink, useNavigate } from "react-router-dom";
+import { setUser } from "../lib/userSlice";
 
-function LoginForm(props) {
+function LoginForm() {
   const [data, setData] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   const handleChangeLogin = (e) => setData(e.target.value);
   const handleChangePass = (e) => setPassword(e.target.value);
 
-  const handleLoginClick = () => {
-    if (data === "admin" && password === "123") {
-      props.setUser({ name: data });
-      enqueueSnackbar("Welcome, " + data, { variant: "success" });
-    } else {
-      enqueueSnackbar("Invalid data or server error", { variant: "error" });
+  const handleLoginClick = async () => {
+    try {
+      setIsLoading(true);
+      const res = await axios.post("https://todos-be.vercel.app/auth/login", {
+        username: data,
+        password: password,
+      });
+
+      if (res.status === 200 && res.data.username) {
+        const setUserAction = setUser(res.data);
+        dispatch(setUserAction);
+        localStorage.setItem('token', res.data.access_token)
+        enqueueSnackbar("Welcome, " + res.data.username, {
+          variant: "success",
+        });
+        
+        navigate('/')
+      }
+    } catch (e) {
+      enqueueSnackbar("Invalid data or server error?", { variant: "error" });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <Stack sx={{ width: 300, gap: 3 }}>
+    <Stack sx={{ width: 300, gap: 3, textAlign: 'center' }}>
       <Typography variant="h3" gutterBottom>
         Вход в сервис
       </Typography>
       <Typography variant="subtitle1" gutterBottom>
         Нет учетной записи?
+        <NavLink style={{ display: "block", marginTop: '10px', textDecoration: 'none', color: 'rgb(25, 118, 210)' }} to="/register">
+          Зарегистрироваться
+        </NavLink>
       </Typography>
-      <Button variant="text" onClick={props.handleRegistration}>
-        Зарегестрироваться
-      </Button>
+
       <TextField
         id="login"
         label="Login"
@@ -53,7 +76,11 @@ function LoginForm(props) {
         onChange={handleChangePass}
         value={password}
       />
-      <Button onClick={handleLoginClick} variant="contained">
+      <Button
+        disabled={isLoading || !data || !password}
+        onClick={handleLoginClick}
+        variant="contained"
+      >
         Войти
       </Button>
     </Stack>

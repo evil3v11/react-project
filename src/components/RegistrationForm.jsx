@@ -6,27 +6,82 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-
+import axios from "axios";
+import { useSnackbar } from "notistack";
 import { React, useState } from "react";
+import { useDispatch } from "react-redux";
+import { NavLink, useNavigate } from "react-router-dom";
+import { setUser } from "../lib/userSlice";
 
-function RegistrationForm(props) {
+function RegistrationForm() {
   const [data, setData] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   const handleChangeLogin = (e) => setData(e.target.value);
   const handleChangePass = (e) => setPassword(e.target.value);
 
+  const handleRegistrationClick = async () => {
+    try {
+      setIsLoading(true);
+      const res = await axios.post(
+        "https://todos-be.vercel.app/auth/register",
+        {
+          username: data,
+          password: password,
+        },
+      );
+
+      if (res.status === 201 && res.data.username) {
+        const res = await axios.post("https://todos-be.vercel.app/auth/login", {
+          username: data,
+          password: password,
+        });
+
+        if (res.status === 200 && res.data.username) {
+          const setUserAction = setUser(res.data);
+          dispatch(setUserAction);
+          localStorage.setItem('token', res.data.access_token)
+          enqueueSnackbar("Welcome, " + res.data.username, {
+            variant: "success",
+          });
+
+          navigate('/')
+        }
+      }
+    } catch (e) {
+      enqueueSnackbar(
+        e.response?.data?.message || "Invalid data or server error",
+        { variant: "error" },
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <Stack sx={{ width: 300, gap: 3 }}>
+    <Stack sx={{ width: 300, gap: 3, textAlign: "center" }}>
       <Typography variant="h3" gutterBottom>
         Регистрация
       </Typography>
       <Typography variant="subtitle1" gutterBottom>
         Есть учетная запись?
+        <NavLink
+          style={{
+            display: "block",
+            marginTop: "10px",
+            textDecoration: "none",
+            color: "rgb(25, 118, 210)",
+          }}
+          to="/login"
+        >
+          Войти
+        </NavLink>
       </Typography>
-      <Button variant="text" onClick={props.handleLogin}>
-        Войти
-      </Button>
+
       <TextField
         id="login"
         label="Login"
@@ -42,7 +97,13 @@ function RegistrationForm(props) {
         onChange={handleChangePass}
         value={password}
       />
-      <Button variant="contained">Регистрация</Button>
+      <Button
+        disabled={isLoading || !data || !password}
+        variant="contained"
+        onClick={handleRegistrationClick}
+      >
+        Регистрация
+      </Button>
     </Stack>
   );
 }
