@@ -1,33 +1,54 @@
 import axios from "axios";
-import React from "react";
-import { store } from "../../lib/store";
-import { NavLink, useLoaderData } from "react-router-dom";
-import { Stack, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { NavLink, useLoaderData, useParams } from "react-router-dom";
+import { CircularProgress, Stack, Typography } from "@mui/material";
 import {
   ArrowBackIos,
   Tornado,
   TornadoOutlined,
   TornadoSharp,
 } from "@mui/icons-material";
-
-export const todoLoader = async ({ params }) => {
-  const id = params.id;
-  const user = store.getState().userSlice.user;
-
-  try {
-    const res = await axios.get(`https://todos-be.vercel.app/todos/${id}`, {
-      headers: {
-        Authorization: `Bearer ${user?.access_token}`,
-      },
-    });
-    return res.data;
-  } catch (e) {
-    console.error(e);
-  }
-};
+import { enqueueSnackbar } from "notistack";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../lib/userSlice";
 
 function Todo() {
-  const todo = useLoaderData();
+  const [isLoading, setIsLoading] = useState(false);
+  const [todo, setTodo] = useState();
+  const user = useSelector(selectUser);
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (id) {
+      setIsLoading(true);
+      axios
+        .get(`https://todos-be.vercel.app/todos/${id}`, {
+          headers: {
+            Authorization: `Bearer ${user?.access_token}`,
+          },
+        })
+        .then((res) => setTodo(res.data))
+        .catch((e) => {
+          enqueueSnackbar(
+            e.response?.data?.message || "Invalid data or server error",
+            { variant: "error" },
+          );
+        })
+        .finally(() => setIsLoading(false));
+    }
+  }, [id]);
+
+  if (!id) {
+    return (
+      <div>
+        <Typography variant="h3">ID was not found</Typography>
+        <NavLink to="/">Home Page</NavLink>
+      </div>
+    );
+  }
+
+  if (isLoading) return <CircularProgress />;
+
   return (
     <Stack>
       <NavLink
@@ -42,7 +63,11 @@ function Todo() {
         }}
       >
         <ArrowBackIos
-          sx={{ verticalAlign: "middle", position: "relative", bottom: "1.5px" }}
+          sx={{
+            verticalAlign: "middle",
+            position: "relative",
+            bottom: "1.5px",
+          }}
         />
         Back
       </NavLink>
