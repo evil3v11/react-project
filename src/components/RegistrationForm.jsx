@@ -44,7 +44,7 @@ function RegistrationForm() {
         if (res.status === 200 && res.data.username) {
           const setUserAction = setUser(res.data);
           dispatch(setUserAction);
-
+          localStorage.setItem('token', res.data.access_token)
           enqueueSnackbar("Welcome, " + res.data.username, {
             variant: "success",
           });
