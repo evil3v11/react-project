@@ -8,9 +8,11 @@ import {
   Typography,
   Link,
 } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink, Outlet } from "react-router-dom";
-import { selectUser } from "../../lib/userSlice";
+import { selectUser, setUser } from "../../lib/userSlice";
+import { jwtDecode } from "jwt-decode";
+import { isFuture } from "date-fns";
 
 const unloggedItems = [
   <NavLink style={{ color: "#fff", textDecoration: "none" }} to="login">
@@ -35,7 +37,16 @@ const loggedItems = [
 
 function Layout() {
   const user = useSelector(selectUser);
+  const localStorageToken = localStorage.getItem("token");
   const navItems = user ? loggedItems : unloggedItems;
+  const dispatch = useDispatch();
+
+  if (!user && localStorageToken) {
+    const { exp, username } = jwtDecode(localStorageToken);
+    if (isFuture(exp * 1000)) {
+      dispatch(setUser({ username, access_token: localStorageToken }));
+    } else localStorage.removeItem("token");
+  }
 
   return (
     <>
