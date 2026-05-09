@@ -36,8 +36,6 @@ function HomePage() {
     if (user?.access_token) getTodos();
   }, [user?.access_token]);
 
-  if (!user) return <Navigate to='/login' />
-
   if (isLoading) return <CircularProgress />;
 
   const handleAddTodo = async (title, description) => {
@@ -138,7 +136,16 @@ function HomePage() {
 
   return (
     <div>
-      <Typography>{user?.username}</Typography>
+      <Typography
+        style={{
+          textAlign: "center",
+          marginBottom: "25px",
+          fontWeight: "bold",
+          fontSize: "1.5rem",
+        }}
+      >
+        Welcome, {user?.username[0].toUpperCase() + user?.username.slice(1)}!
+      </Typography>
       <AddTodo addTodo={handleAddTodo} />
       {todos.map((item) => (
         <TodoItem
