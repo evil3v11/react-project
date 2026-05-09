@@ -10,7 +10,7 @@ import axios from "axios";
 import { useSnackbar } from "notistack";
 import { React, useState } from "react";
 import { useDispatch } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { setUser } from "../lib/userSlice";
 
 function RegistrationForm() {
@@ -18,8 +18,8 @@ function RegistrationForm() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   const handleChangeLogin = (e) => setData(e.target.value);
   const handleChangePass = (e) => setPassword(e.target.value);
@@ -44,9 +44,12 @@ function RegistrationForm() {
         if (res.status === 200 && res.data.username) {
           const setUserAction = setUser(res.data);
           dispatch(setUserAction);
+
           enqueueSnackbar("Welcome, " + res.data.username, {
             variant: "success",
           });
+
+          navigate('/')
         }
       }
     } catch (e) {
